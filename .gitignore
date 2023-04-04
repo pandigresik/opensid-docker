@@ -1,3 +1,7 @@
 db_data/*
+# exception to the rule
+!db_data/.gitkeep 
 logs/nginx/*
+# exception to the rule
+!logs/nginx/.gitkeep 
 opensid/*
