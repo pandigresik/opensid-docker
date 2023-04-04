@@ -6,52 +6,56 @@ Repositori ini merupakan sekumpulan berkas pendukung jika Anda menginginkan mela
 
 > **CATATAN**: Panduan yang lebih lengkap dapat dibaca di [Wiki OpenSID](https://github.com/OpenSID/OpenSID/wiki/Instalasi-OpenSID-dengan-Docker-Container)
 
-Langkah Instalasinya adalah sebagai berikut: yang pertama, kita perlu clone repo OpenSID.
+Langkah Instalasinya adalah sebagai berikut: yang pertama, kita perlu clone repo OpenSID didalam folder repo ini.
 
 ```
-git clone -b umum https://github.com/OpenSID/OpenSID.git
-cd OpenSID
+git clone -b umum https://github.com/OpenSID/OpenSID.git opensid
+cd opensid
 ```
 
-Download repo ini, lalu copy/salin folder `.docker` dan berkas `docker-compose.yml` ke dalam folder OpenSID sehingga struktur direktorinya menjadi seperti ini:
+sehingga kurang lebih susunan foldernya seperti dibawah ini
 
 ```
-├── assets
-├── cacert.pem
-├── catatan_rilis.md
-├── catatan_singkat_library_yang_digunakan.md
-├── contoh_data_awal_20220301.sql
-├── desa
-├── desa-contoh
+├── .docker
+├── db_data
+├── logs
+├── opensid
 ├── .docker
 ├── docker-compose.yml
-├── donjo-app
-├── favicon.ico
-├── .git
-├── .gitattributes
-├── .github
-├── .gitignore
-├── htaccess.txt
-├── idm_2022_3301092008.json
-├── index.php
-├── LICENSE
-├── logs
-├── README.md
-├── securimage
-├── system
-├── template-surat
-├── themes
-├── vendor
-└── version.json
 ```
 
 lakukan perubahan yang diperlukan pada berkas `docker-compose.yml`, misal Anda ingin mengubah password MySQL-nya, ganti `rahasia` dengan password yang lebih aman.
 
-Selanjutnya, buat/salin folder `desa` dari `desa-contoh`
+```bash
+docker-compose up --build
+```
+
+
+Tunggu hingga sekitar 10-30 menit. Kecepatannya tentunya tergantung dari spesifikasi server Anda dan koneksi internet yang digunakan.
+
+Buat database untuk aplikasi kita, kali ini saya gunakan command line untuk masuk ke instance mysql kita yang baru dimana kita set port expose ke 3307, karena 3306 sudah dipakai mysql bawaan OS
 
 ```bash
-cp -a desa-contoh desa
+mysql -u opensid -h 127.0.01 -P 3307 -p
+$ mysql -u opensid -h 127.0.0.1 -P 3307 -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 54
+Server version: 5.5.5-10.3.38-MariaDB-1:10.3.38+maria~ubu2004 mariadb.org binary distribution
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database opensid;
 ```
+Jika sudah selesai anda bisa tekan Ctrl + D untuk keluar
+
+Setelah selesai, silakan akses melalui browser di url http://localhost:8000, setelah itu aplikasi akan menampilkan error untuk meminta setting koneksi database;
 
 pada file `desa/config/database.php`, sesuaikan konfigurasi database-nya dengan file yml tadi. Misalnya sebagai berikut
 
@@ -64,16 +68,12 @@ $db['default']['database'] = 'opensid';
 
 > **CATATAN**: db hostname harus ditulis sebagai `db`, jika tidak, aplikasi akan error karena tidak dapat terhubung dengan database. Kecuali Anda mengubah file `docker-compose.yml` pada bagian nama service db.
 
-Jika proses di atas sudah dilakukan, sekarang saatnya kita jalankan proses deployment-nya.
-
-```bash
-docker-compose up --build
-```
-
-Tunggu hingga sekitar 10-30 menit. Kecepatannya tentunya tergantung dari spesifikasi server Anda dan koneksi internet yang digunakan. Selanjutnya eksekusi perintah berikut untuk mengubah permission folder aplikasi di dalam container.
+Selanjutnya eksekusi perintah berikut untuk mengubah permission folder aplikasi di dalam container.
 
 ```
-docker-compose exec php chown -Rf www-data.www-data /public_html
+docker-compose exec php chown -Rf www-data.www-data /public_html/storage
+docker-compose exec php chown -Rf www-data.www-data /public_html/desa
+docker-compose exec php chown -Rf www-data.www-data /public_html/backup_incremental
 ```
 
-Setelah selesai, silakan akses melalui browser di url http://localhost atau http://ip-server
+Setelah selesai, silakan akses kembali melalui browser di url http://localhost:8000
