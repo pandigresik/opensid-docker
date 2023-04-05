@@ -32,6 +32,16 @@ docker-compose up --build
 
 Tunggu hingga sekitar 10-30 menit. Kecepatannya tentunya tergantung dari spesifikasi server Anda dan koneksi internet yang digunakan.
 
+Selanjutnya eksekusi perintah berikut untuk mengubah permission folder aplikasi di dalam container.
+
+```
+docker-compose exec php chown -f www-data.www-data /public_html
+docker-compose exec php chown -Rf www-data.www-data /public_html/storage
+docker-compose exec php chown -Rf www-data.www-data /public_html/backup_inkremental
+docker-compose exec php mkdir /public_html/desa
+docker-compose exec php chown -Rf www-data.www-data /public_html/desa
+```
+
 Setelah selesai, silakan akses melalui browser di url http://localhost:8000, setelah itu aplikasi akan menampilkan error untuk meminta setting koneksi database;
 
 pada file `desa/config/database.php`, sesuaikan konfigurasi database-nya dengan file yml tadi. Misalnya sebagai berikut
@@ -44,17 +54,5 @@ $db['default']['database'] = 'opensid';
 ```
 
 > **CATATAN**: db hostname harus ditulis sebagai `db`, jika tidak, aplikasi akan error karena tidak dapat terhubung dengan database. Kecuali Anda mengubah file `docker-compose.yml` pada bagian nama service db.
-
-Selanjutnya eksekusi perintah berikut untuk mengubah permission folder aplikasi di dalam container.
-
-```
-docker-compose exec php chown -f www-data.www-data /public_html
-docker-compose exec php chown -Rf www-data.www-data /public_html/storage
-docker-compose exec php chown -Rf www-data.www-data /public_html/backup_inkremental
-docker-compose exec php mkdir /public_html/desa
-docker-compose exec php chown -Rf www-data.www-data /public_html/desa
-
-mysql -u root -e "create database testdb"; 
-```
 
 Setelah selesai, silakan akses kembali melalui browser di url http://localhost:8000
