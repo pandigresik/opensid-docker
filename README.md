@@ -58,4 +58,4 @@ $db['default']['database'] = 'opensid';
 Setelah selesai, silakan akses kembali melalui browser di url http://localhost:8000
 
 ## Video tutorial demo opensid docker
-- https://www.youtube.com/watch?v=KCVbGSNmmSA
+- https://youtu.be/KCVbGSNmmSA
