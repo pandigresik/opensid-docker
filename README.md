@@ -32,12 +32,6 @@ docker-compose up --build
 
 Tunggu hingga sekitar 10-30 menit. Kecepatannya tentunya tergantung dari spesifikasi server Anda dan koneksi internet yang digunakan.
 
-Buat database untuk aplikasi kita, kali ini saya gunakan command line untuk masuk ke instance mysql kita yang baru dimana kita set port expose ke 3307, karena 3306 sudah dipakai mysql bawaan OS
-
-```bash
-docker-compose exec db mysql -u opensid -prahasia -e "create database opensid"; 
-```
-
 Setelah selesai, silakan akses melalui browser di url http://localhost:8000, setelah itu aplikasi akan menampilkan error untuk meminta setting koneksi database;
 
 pada file `desa/config/database.php`, sesuaikan konfigurasi database-nya dengan file yml tadi. Misalnya sebagai berikut
@@ -54,9 +48,12 @@ $db['default']['database'] = 'opensid';
 Selanjutnya eksekusi perintah berikut untuk mengubah permission folder aplikasi di dalam container.
 
 ```
+docker-compose exec php chown -f www-data.www-data /public_html
 docker-compose exec php chown -Rf www-data.www-data /public_html/storage
+docker-compose exec php chown -Rf www-data.www-data /public_html/backup_inkremental
+docker-compose exec php mkdir /public_html/desa
 docker-compose exec php chown -Rf www-data.www-data /public_html/desa
-docker-compose exec php chown -Rf www-data.www-data /public_html/backup_incremental
+
 mysql -u root -e "create database testdb"; 
 ```
 
