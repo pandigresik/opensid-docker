@@ -56,3 +56,6 @@ $db['default']['database'] = 'opensid';
 > **CATATAN**: db hostname harus ditulis sebagai `db`, jika tidak, aplikasi akan error karena tidak dapat terhubung dengan database. Kecuali Anda mengubah file `docker-compose.yml` pada bagian nama service db.
 
 Setelah selesai, silakan akses kembali melalui browser di url http://localhost:8000
+
+## Video tutorial demo opensid docker
+- https://www.youtube.com/watch?v=KCVbGSNmmSA
