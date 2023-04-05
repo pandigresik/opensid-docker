@@ -9,8 +9,7 @@ services:
     links:
       - php
     networks:
-      - frontend
-      - backend
+      - frontend      
     ports:
       - 8000:80
     volumes:
