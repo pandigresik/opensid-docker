@@ -42,11 +42,11 @@ services:
     networks:
       - backend
     environment:
-      # MYSQL_ROOT_PASSWORD: rahasia
-      MYSQL_RANDOM_ROOT_PASSWORD: 1
-      MYSQL_DATABASE: opensid
-      MYSQL_USER: opensid
-      MYSQL_PASSWORD: rahasia
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      # MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MARIADB_DATABASE: opensid
+      MARIADB_USER: opensid
+      MARIADB_PASSWORD: rahasia      
     volumes:
       - ./db_data:/var/lib/mysql
 
